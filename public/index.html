@@ -16,7 +16,7 @@
 	
 	<body>
 		<div class="registration">
-			<form>
+			<form action="#" onsubmit="chat.join()">
 				<label>
 					<span class="label">Server IP:</span>
 					<input type="text" id="server-ip" placeholder="127.0.0.1:6942">
@@ -36,10 +36,10 @@
 				<p class="message"><span class="sender">Learn Totwerk</span>hello guys i just took a large dump</p>
 			</div>
 			
-			<div class="input">
+			<form action="#" onsubmit="chat.send()" class="input">
 				<input type="text" id="message" placeholder="Your message">
 				<input type="submit" id="send" value="Send">
-			</div>
+			</form>
 		</div>
 	</body>
 </html>
