@@ -19,16 +19,27 @@
 			<form>
 				<label>
 					<span class="label">Server IP:</span>
-					<input type="text" id="server-ip">
+					<input type="text" id="server-ip" placeholder="127.0.0.1:6942">
 				</label>
 				
 				<label>
 					<span class="label">Nickname:</span>
-					<input type="text" id="nickname">
+					<input type="text" id="nickname" placeholder="John Buttocks">
 				</label>
 				
 				<label><input type="submit" id="join" value="Join"></label>
 			</form>
+		</div>
+		
+		<div class="chat" hidden>
+			<div class="messages">
+				<p class="message"><span class="sender">Learn Totwerk</span>hello guys i just took a large dump</p>
+			</div>
+			
+			<div class="input">
+				<input type="text" id="message" placeholder="Your message">
+				<input type="submit" id="send" value="Send">
+			</div>
 		</div>
 	</body>
 </html>

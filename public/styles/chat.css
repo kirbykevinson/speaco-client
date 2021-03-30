@@ -22,7 +22,7 @@ body {
 	background: #007F7F;
 }
 
-body > *, input {
+body > *, input, .messages {
 	border-style: solid;
 	border-width: 2px;
 }
@@ -45,14 +45,14 @@ input {
 	color: var(--foreground-color);
 }
 
-input[type="text"], input[type="submit"]:active {
+input[type="text"], input[type="submit"]:active, .messages {
 	border-top-color: var(--shadow-color);
 	border-left-color: var(--shadow-color);
 	border-bottom-color: var(--light-color);
 	border-right-color: var(--light-color);
 }
 
-input[type="text"] {
+input[type="text"], .messages {
 	background: #FFFFFF;
 }
 
@@ -78,4 +78,46 @@ input[type="submit"] {
 
 #join {
 	float: right;
+}
+
+.chat {
+	display: flex;
+	flex-direction: column;
+	flex-grow: 1;
+	box-sizing: border-box;
+	width: min(40em, 100vw);
+}
+
+.messages {
+	flex-grow: 1;
+}
+
+.message {
+	margin-top: 0;
+}
+
+.sender {
+	font-weight: bold;
+	color: #00007F;
+}
+
+.sender::before {
+	content: "<";
+}
+.sender::after {
+	content: "> ";
+}
+
+.input {
+	display: flex;
+	margin-top: 1em;
+}
+
+#message {
+	flex-grow: 1;
+	margin-right: 1em;
+}
+
+*[hidden] {
+	display: none;
 }
