@@ -1,3 +1,81 @@
 @charset "utf-8";
 
+:root {
+	--background-color: #C0C0C0;
+	--foreground-color: #000000;
+	--light-color: #FFFFFF;
+	--shadow-color: #808080;
+}
 
+body {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	width: 100vw;
+	height : 100vh;
+	padding: 0;
+	margin: 0;
+	font-family: sans-serif;
+	font-size: 14pt;
+	color: var(--foreground-color);
+	background: #007F7F;
+}
+
+body > *, input {
+	border-style: solid;
+	border-width: 2px;
+}
+
+body > *, input[type="submit"] {
+	border-top-color: var(--light-color);
+	border-left-color: var(--light-color);
+	border-bottom-color: var(--shadow-color);
+	border-right-color: var(--shadow-color);
+	background: var(--background-color);
+}
+
+body > * {
+	padding: 1em;
+	box-shadow: 1em 1em #0000007F;
+}
+
+input {
+	font-size: inherit;
+	color: var(--foreground-color);
+}
+
+input[type="text"], input[type="submit"]:active {
+	border-top-color: var(--shadow-color);
+	border-left-color: var(--shadow-color);
+	border-bottom-color: var(--light-color);
+	border-right-color: var(--light-color);
+}
+
+input[type="text"] {
+	background: #FFFFFF;
+}
+
+input[type="submit"] {
+	background: var(--background-color);
+}
+
+.registration {
+	
+}
+
+.registration label {
+	display: block;
+}
+.registration label:not(:last-child) {
+	margin-bottom: 1em;
+}
+
+.registration .label {
+	display: inline-block;
+	min-width: 5em;
+}
+
+#join {
+	float: right;
+}
