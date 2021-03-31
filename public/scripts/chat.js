@@ -75,7 +75,7 @@ class Chat {
 			try {
 				parsedEvent = JSON.parse(event.data);
 			} catch (error) {
-				this.error("malformed event");
+				this.error("malformed server-sent event");
 				
 				console.log(event.data);
 				
@@ -83,13 +83,13 @@ class Chat {
 			}
 			
 			if (!parsedEvent || typeof parsedEvent != "object") {
-				this.error("event is not an object");
+				this.error("server-sent event is not an object");
 				
 				return;
 			}
 			
 			if (!("type" in parsedEvent)) {
-				this.error("event without a type");
+				this.error("server-sent event without a type");
 				
 				return;
 			}
@@ -100,7 +100,7 @@ class Chat {
 	
 	sendEvent(type, data) {
 		if (!data || typeof data != "object") {
-			throw new TypeError("event data must be an object");
+			throw new TypeError("client-sent event must be an object");
 		}
 		
 		data.type = type;
@@ -124,7 +124,7 @@ class Chat {
 			
 			break;
 		default:
-			this.error("illegal event type");
+			this.error("illegal server-sent event type");
 			
 			console.log(event);
 			
