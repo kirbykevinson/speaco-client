@@ -109,17 +109,31 @@ class Chat {
 	}
 	recieveEvent(event) {
 		switch (event.type) {
+		case "welcome":
+			this.open();
+			
+			break;
+		case "bye":
+			alert("You've been kicked");
+			
+			this.close();
+			
+			break;
+		case "error":
+			this.error(event.message);
+			
+			break;
 		default:
 			this.error("illegal event type");
 			
 			console.log(event);
 			
-			return;
+			break;
 		}
 	}
 	
 	sendMessage() {
-		
+		this.elements.message.value = "";
 	}
 	recieveMessage(sender, message) {
 		const container = document.createElement("p");
