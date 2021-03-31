@@ -77,6 +77,8 @@ class Chat {
 			} catch (error) {
 				this.error("malformed event");
 				
+				console.log(event.data);
+				
 				return;
 			}
 			
@@ -109,6 +111,8 @@ class Chat {
 		switch (event.type) {
 		default:
 			this.error("illegal event type");
+			
+			console.log(event);
 			
 			return;
 		}
