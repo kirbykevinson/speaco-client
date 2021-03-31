@@ -60,10 +60,6 @@ input[type="submit"] {
 	background: var(--background-color);
 }
 
-.registration {
-	
-}
-
 .registration label {
 	display: block;
 }
@@ -93,7 +89,7 @@ input[type="submit"] {
 }
 
 .message {
-	margin-top: 0;
+	margin: 0;
 }
 
 .sender {
