@@ -123,6 +123,25 @@ class Chat {
 			this.error(event.message);
 			
 			break;
+		case "message":
+			if (typeof event.sender != "string") {
+				this.error("server-sent message sender isn't a string");
+				
+				console.log(event);
+				
+				return;
+			}
+			if (typeof event.text != "string") {
+				this.error("server-sent message text isn't a string");
+				
+				console.log(event);
+				
+				return;
+			}
+			
+			this.recieveMessage(event.sender, event.text);
+			
+			break;
 		default:
 			this.error("illegal server-sent event type");
 			
@@ -133,6 +152,10 @@ class Chat {
 	}
 	
 	sendMessage() {
+		this.sendEvent("message", {
+			text: this.elements.message.value
+		});
+		
 		this.elements.message.value = "";
 	}
 	recieveMessage(sender, message) {
