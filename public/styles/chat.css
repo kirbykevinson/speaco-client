@@ -16,6 +16,10 @@
 	scrollbar-width: auto;
 }
 
+*::before, *::after {
+	box-sizing: inherit;
+}
+
 ::selection {
 	background: #00007F;
 	color: #FFFFFF;
@@ -50,6 +54,7 @@ body > *, button {
 }
 
 body > * {
+	min-width: 0;
 	padding: 1em;
 	box-shadow: 1em 1em #0000007F;
 }
