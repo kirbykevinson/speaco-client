@@ -78,10 +78,15 @@ button:hover:active {
 }
 
 #registration label {
-	display: block;
+	display: flex;
+	flex-wrap: wrap;
 }
 #registration label:not(:last-child) {
 	margin-bottom: 1em;
+}
+
+#registration label input[type="text"] {
+	flex-grow: 1;
 }
 
 #registration .label {
