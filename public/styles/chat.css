@@ -93,6 +93,7 @@ button:hover:active {
 .messages {
 	flex-grow: 1;
 	overflow: auto;
+	overflow-wrap: break-word;
 }
 
 .message {
