@@ -82,10 +82,12 @@ input[type="submit"] {
 	flex-grow: 1;
 	box-sizing: border-box;
 	width: min(40em, 100vw);
+	max-height: 100vh;
 }
 
 .messages {
 	flex-grow: 1;
+	overflow: auto;
 }
 
 .message {

@@ -38,6 +38,9 @@ class Chat {
 		
 		this.elements.registration.hidden = false;
 		this.elements.chat.hidden = true;
+		
+		this.elements.messages.innerHTML = "";
+		this.elements.message.value = "";
 	}
 	
 	join() {
@@ -159,6 +162,18 @@ class Chat {
 		this.elements.message.value = "";
 	}
 	recieveMessage(sender, message) {
+		let shouldScroll = false;
+		
+		const oldScroll = this.elements.messages.scrollTop;
+		
+		this.elements.messages.scrollTop = this.elements.messages.scrollHeight;
+		
+		if (this.elements.messages.scrollTop == oldScroll) {
+			shouldScroll = true;
+		} else {
+			this.elements.messages.scrollTop = oldScroll;
+		}
+		
 		const container = document.createElement("p");
 		
 		container.className = "message";
@@ -175,6 +190,10 @@ class Chat {
 		container.appendChild(text);
 		
 		this.elements.messages.appendChild(container);
+		
+		if (shouldScroll) {
+			this.elements.messages.scrollTop = this.elements.messages.scrollHeight;
+		}
 	}
 }
 
