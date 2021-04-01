@@ -9,6 +9,7 @@
 }
 
 * {
+	box-sizing: border-box;
 	image-rendering: -moz-crisp-edges;
 	image-rendering: pixelated;
 	scrollbar-color: #888888 #C0C0C0;
@@ -102,7 +103,6 @@ button:hover:active {
 	display: flex;
 	flex-direction: column;
 	flex-grow: 1;
-	box-sizing: border-box;
 	width: min(40em, 100vw);
 	max-height: 100vh;
 }
