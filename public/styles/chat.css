@@ -46,7 +46,7 @@ input, button {
 	color: var(--foreground-color);
 }
 
-input[type="text"], button:active, .messages {
+input[type="text"], button:hover:active, .messages {
 	border-top-color: var(--shadow-color);
 	border-left-color: var(--shadow-color);
 	border-bottom-color: var(--light-color);
@@ -61,7 +61,7 @@ button {
 	background: var(--background-color);
 }
 
-button:active {
+button:hover:active {
 	background: var(--dark-color);
 }
 
