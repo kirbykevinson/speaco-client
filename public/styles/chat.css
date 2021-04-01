@@ -4,6 +4,7 @@
 	--background-color: #C0C0C0;
 	--foreground-color: #000000;
 	--light-color: #FFFFFF;
+	--dark-color: #A0A0A0;
 	--shadow-color: #808080;
 }
 
@@ -58,6 +59,10 @@ input[type="text"], .messages {
 
 input[type="submit"] {
 	background: var(--background-color);
+}
+
+input[type="submit"]:active {
+	background: var(--dark-color);
 }
 
 .registration label {
