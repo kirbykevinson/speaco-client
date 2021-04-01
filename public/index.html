@@ -15,8 +15,8 @@
 	</head>
 	
 	<body>
-		<div class="registration">
-			<form onsubmit="event.preventDefault(); chat.join();">
+		<div id="registration" hidden>
+			<form id="registration-form">
 				<label>
 					<span class="label">Server IP:</span>
 					<input type="text" id="server-ip" placeholder="127.0.0.1:6942">
@@ -31,14 +31,11 @@
 			</form>
 		</div>
 		
-		<div class="chat" hidden>
-			<div class="messages"></div>
+		<div id="chat" hidden>
+			<div id="messages"></div>
 			
-			<form
-				onsubmit="event.preventDefault(); chat.sendMessage();"
-				class="input"
-			>
-				<textarea id="message" placeholder="Your message"></textarea>
+			<form id="chat-form">
+				<textarea id="message-input" placeholder="Your message"></textarea>
 				<button>Send</button>
 			</form>
 		</div>

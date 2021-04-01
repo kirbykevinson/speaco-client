@@ -1,20 +1,40 @@
 class Chat {
 	constructor() {
 		this.elements = {
-			registration: document.querySelector(".registration"),
-			chat: document.querySelector(".chat"),
+			registration: document.querySelector("#registration"),
+			chat: document.querySelector("#chat"),
+			
+			registrationForm: document.querySelector("#registration-form"),
+			chatForm: document.querySelector("#chat-form"),
 			
 			serverIp: document.querySelector("#server-ip"),
 			nickname: document.querySelector("#nickname"),
 			
-			messages: document.querySelector(".messages"),
-			message: document.querySelector("#message"),
+			messages: document.querySelector("#messages"),
+			messageInput: document.querySelector("#message-input"),
 		};
+		
+		this.elements.registrationForm.addEventListener(
+			"submit",
+			
+			(event) => {
+				event.preventDefault();
+				
+				this.join();
+			}
+		);
+		this.elements.chatForm.addEventListener("submit", (event) => {
+				event.preventDefault();
+				
+				this.sendMessage();
+		});
 		
 		this.serverIp = null;
 		this.nickname = null;
 		
 		this.socket = null;
+		
+		this.close();
 	}
 	
 	error(message, error) {
@@ -40,7 +60,7 @@ class Chat {
 		this.elements.chat.hidden = true;
 		
 		this.elements.messages.innerHTML = "";
-		this.elements.message.value = "";
+		this.elements.messageInput.value = "";
 	}
 	
 	join() {
@@ -167,10 +187,10 @@ class Chat {
 	
 	sendMessage() {
 		this.sendEvent("message", {
-			text: this.elements.message.value
+			text: this.elements.messageInput.value
 		});
 		
-		this.elements.message.value = "";
+		this.elements.messageInput.value = "";
 	}
 	recieveMessage(sender, text, timestamp) {
 		let shouldScroll = false;

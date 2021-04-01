@@ -23,7 +23,7 @@ body {
 	background: #007F7F;
 }
 
-body > *, input, .messages {
+body > *, input, #messages {
 	border-style: solid;
 	border-width: 2px;
 }
@@ -46,14 +46,14 @@ input, textarea, button {
 	color: var(--foreground-color);
 }
 
-input[type="text"], textarea, button:hover:active, .messages {
+input[type="text"], textarea, button:hover:active, #messages {
 	border-top-color: var(--shadow-color);
 	border-left-color: var(--shadow-color);
 	border-bottom-color: var(--light-color);
 	border-right-color: var(--light-color);
 }
 
-input[type="text"], textarea, .messages {
+input[type="text"], textarea, #messages {
 	background: #FFFFFF;
 }
 
@@ -65,14 +65,14 @@ button:hover:active {
 	background: var(--dark-color);
 }
 
-.registration label {
+#registration label {
 	display: block;
 }
-.registration label:not(:last-child) {
+#registration label:not(:last-child) {
 	margin-bottom: 1em;
 }
 
-.registration .label {
+#registration .label {
 	display: inline-block;
 	min-width: 5em;
 }
@@ -81,7 +81,7 @@ button:hover:active {
 	float: right;
 }
 
-.chat {
+#chat {
 	display: flex;
 	flex-direction: column;
 	flex-grow: 1;
@@ -90,7 +90,7 @@ button:hover:active {
 	max-height: 100vh;
 }
 
-.messages {
+#messages {
 	flex-grow: 1;
 	overflow: auto;
 	overflow-wrap: break-word;
@@ -125,16 +125,16 @@ button:hover:active {
 	color: #0000003F;
 }
 
-.input {
+#chat-form {
 	display: flex;
 	margin-top: 1em;
 }
 
-#message {
+#message-input {
 	flex-grow: 1;
 	margin-right: 1em;
 }
 
 *[hidden] {
-	display: none;
+	display: none !important;
 }
