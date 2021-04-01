@@ -127,8 +127,8 @@ class Chat {
 			
 			break;
 		case "message":
-			if (typeof event.sender != "string") {
-				this.error("server-sent message sender isn't a string");
+			if (event.sender && typeof event.sender != "string") {
+				this.error("invalid server-sent message sender");
 				
 				console.log(event);
 				
@@ -178,12 +178,16 @@ class Chat {
 		
 		container.className = "message";
 		
-		const senderName = document.createElement("span");
-		
-		senderName.className = "sender";
-		senderName.innerText = sender;
-		
-		container.appendChild(senderName);
+		if (sender) {
+			const senderName = document.createElement("span");
+			
+			senderName.className = "sender";
+			senderName.innerText = sender;
+			
+			container.appendChild(senderName);
+		} else {
+			container.className += " meta";
+		}
 		
 		const text = document.createTextNode(message);
 		
