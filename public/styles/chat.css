@@ -105,19 +105,19 @@ button:hover:active {
 	color: #007F00;
 }
 
-.sender {
+.message .sender {
 	font-weight: bold;
 	color: #00007F;
 }
 
-.sender::before {
+.message .sender::before {
 	content: "<";
 }
-.sender::after {
+.message .sender::after {
 	content: "> ";
 }
 
-.timestamp {
+.message .timestamp {
 	margin-left: 1rem;
 	vertical-align: middle;
 	font-size: 0.5em;

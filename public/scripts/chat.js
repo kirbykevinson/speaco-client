@@ -172,7 +172,7 @@ class Chat {
 		
 		this.elements.message.value = "";
 	}
-	recieveMessage(sender, message, timestamp) {
+	recieveMessage(sender, text, timestamp) {
 		let shouldScroll = false;
 		
 		const oldScroll = this.elements.messages.scrollTop;
@@ -200,9 +200,13 @@ class Chat {
 			container.className += " meta";
 		}
 		
-		const text = document.createTextNode(message);
+		const textElement = document.createElement("span");
 		
-		container.appendChild(text);
+		textElement.className = "text";
+		textElement.innerText = text;
+		textElement.innerHTML = textElement.innerHTML.replace(/\n/g, "<br>");
+		
+		container.appendChild(textElement);
 		
 		const timestampElement = document.createElement("span");
 		
@@ -210,8 +214,6 @@ class Chat {
 		timestampElement.innerText = timestamp.toLocaleString();
 		
 		container.appendChild(timestampElement);
-		
-		container.innerHTML = container.innerHTML.replace(/\n/g, "<br>");
 		
 		this.elements.messages.appendChild(container);
 		
