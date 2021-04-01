@@ -24,10 +24,24 @@ class Chat {
 			}
 		);
 		this.elements.chatForm.addEventListener("submit", (event) => {
-				event.preventDefault();
-				
-				this.sendMessage();
+			event.preventDefault();
+			
+			this.sendMessage();
 		});
+		
+		// We assume that if the device has a mouse, it also has a
+		// keyboard. This is not the right way to do it, but there isn't a
+		// better one
+		
+		if (window.matchMedia("(hover: hover)").matches) {
+			this.elements.messageInput.addEventListener("keydown", (event) => {
+				if (event.code == "Enter" && !event.shiftKey) {
+					event.preventDefault();
+					
+					this.elements.chatForm.requestSubmit();
+				}
+			});
+		}
 		
 		this.serverIp = null;
 		this.nickname = null;
@@ -193,6 +207,9 @@ class Chat {
 		this.elements.messageInput.value = "";
 	}
 	recieveMessage(sender, text, timestamp) {
+		// The messages should be scrolled only if the user didn't scroll
+		// them manually, so we need to detect if that happened
+		
 		let shouldScroll = false;
 		
 		const oldScroll = this.elements.messages.scrollTop;
