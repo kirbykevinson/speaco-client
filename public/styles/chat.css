@@ -99,6 +99,11 @@ button:hover:active {
 	min-width: 5em;
 }
 
+.banner {
+	max-width: 100%;
+	margin-bottom: 1em;
+}
+
 #join-button {
 	float: right;
 }
