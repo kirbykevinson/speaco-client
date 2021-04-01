@@ -141,8 +141,19 @@ class Chat {
 				
 				return;
 			}
+			if (typeof event.timestamp != "string") {
+				this.error("server-sent message timestamp isn't a string");
+				
+				console.log(event);
+				
+				return;
+			}
 			
-			this.recieveMessage(event.sender, event.text);
+			this.recieveMessage(
+				event.sender,
+				event.text,
+				new Date(event.timestamp)
+			);
 			
 			break;
 		default:
@@ -161,7 +172,7 @@ class Chat {
 		
 		this.elements.message.value = "";
 	}
-	recieveMessage(sender, message) {
+	recieveMessage(sender, message, timestamp) {
 		let shouldScroll = false;
 		
 		const oldScroll = this.elements.messages.scrollTop;
@@ -179,12 +190,12 @@ class Chat {
 		container.className = "message";
 		
 		if (sender) {
-			const senderName = document.createElement("span");
+			const senderElement = document.createElement("span");
 			
-			senderName.className = "sender";
-			senderName.innerText = sender;
+			senderElement.className = "sender";
+			senderElement.innerText = sender;
 			
-			container.appendChild(senderName);
+			container.appendChild(senderElement);
 		} else {
 			container.className += " meta";
 		}
@@ -192,6 +203,13 @@ class Chat {
 		const text = document.createTextNode(message);
 		
 		container.appendChild(text);
+		
+		const timestampElement = document.createElement("span");
+		
+		timestampElement.className = "timestamp";
+		timestampElement.innerText = timestamp.toLocaleString();
+		
+		container.appendChild(timestampElement);
 		
 		this.elements.messages.appendChild(container);
 		
