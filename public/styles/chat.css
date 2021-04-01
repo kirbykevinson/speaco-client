@@ -154,6 +154,7 @@ button:hover:active {
 #message-input {
 	flex-grow: 1;
 	min-width: 0;
+	height: 3em;
 	margin-right: 1em;
 	resize: none;
 }
