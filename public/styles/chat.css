@@ -41,19 +41,19 @@ body > * {
 	box-shadow: 1em 1em #0000007F;
 }
 
-input, button {
+input, textarea, button {
 	font-size: inherit;
 	color: var(--foreground-color);
 }
 
-input[type="text"], button:hover:active, .messages {
+input[type="text"], textarea, button:hover:active, .messages {
 	border-top-color: var(--shadow-color);
 	border-left-color: var(--shadow-color);
 	border-bottom-color: var(--light-color);
 	border-right-color: var(--light-color);
 }
 
-input[type="text"], .messages {
+input[type="text"], textarea, .messages {
 	background: #FFFFFF;
 }
 

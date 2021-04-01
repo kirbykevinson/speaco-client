@@ -211,6 +211,8 @@ class Chat {
 		
 		container.appendChild(timestampElement);
 		
+		container.innerHTML = container.innerHTML.replace(/\n/g, "<br>");
+		
 		this.elements.messages.appendChild(container);
 		
 		if (shouldScroll) {
