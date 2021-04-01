@@ -28,7 +28,7 @@ body > *, input, .messages {
 	border-width: 2px;
 }
 
-body > *, input[type="submit"] {
+body > *, button {
 	border-top-color: var(--light-color);
 	border-left-color: var(--light-color);
 	border-bottom-color: var(--shadow-color);
@@ -41,12 +41,12 @@ body > * {
 	box-shadow: 1em 1em #0000007F;
 }
 
-input {
+input, button {
 	font-size: inherit;
 	color: var(--foreground-color);
 }
 
-input[type="text"], input[type="submit"]:active, .messages {
+input[type="text"], button:active, .messages {
 	border-top-color: var(--shadow-color);
 	border-left-color: var(--shadow-color);
 	border-bottom-color: var(--light-color);
@@ -57,11 +57,11 @@ input[type="text"], .messages {
 	background: #FFFFFF;
 }
 
-input[type="submit"] {
+button {
 	background: var(--background-color);
 }
 
-input[type="submit"]:active {
+button:active {
 	background: var(--dark-color);
 }
 
