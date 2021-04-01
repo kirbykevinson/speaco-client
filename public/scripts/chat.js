@@ -10,6 +10,9 @@ class Chat {
 			serverIp: document.querySelector("#server-ip"),
 			nickname: document.querySelector("#nickname"),
 			
+			joinButton: document.querySelector("#join-button"),
+			sendButton: document.querySelector("#send-button"),
+			
 			messages: document.querySelector("#messages"),
 			messageInput: document.querySelector("#message-input"),
 		};
@@ -38,7 +41,7 @@ class Chat {
 				if (event.code == "Enter" && !event.shiftKey) {
 					event.preventDefault();
 					
-					this.elements.chatForm.requestSubmit();
+					this.elements.sendButton.click();
 				}
 			});
 		}
