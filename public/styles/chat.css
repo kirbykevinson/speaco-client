@@ -8,16 +8,15 @@
 	--shadow-color: #808080;
 }
 
+*, *::before, *::after {
+	box-sizing: inherit;
+}
+
 * {
-	box-sizing: border-box;
 	image-rendering: -moz-crisp-edges;
 	image-rendering: pixelated;
 	scrollbar-color: #888888 #C0C0C0;
 	scrollbar-width: auto;
-}
-
-*::before, *::after {
-	box-sizing: inherit;
 }
 
 ::selection {
