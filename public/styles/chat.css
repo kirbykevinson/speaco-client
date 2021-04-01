@@ -90,6 +90,10 @@ button:hover:active {
 	max-height: 100vh;
 }
 
+#messages, #message-input {
+	font-family: serif;
+}
+
 #messages {
 	flex-grow: 1;
 	overflow: auto;
@@ -113,11 +117,8 @@ button:hover:active {
 	color: #7F0000;
 }
 
-.message .sender::before {
-	content: "<";
-}
 .message .sender::after {
-	content: "> ";
+	content: ": ";
 }
 
 .message .timestamp {
@@ -136,6 +137,7 @@ button:hover:active {
 #message-input {
 	flex-grow: 1;
 	margin-right: 1em;
+	resize: none;
 }
 
 *[hidden] {
