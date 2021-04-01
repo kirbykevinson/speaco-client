@@ -235,6 +235,10 @@ class Chat {
 			senderElement.className = "sender";
 			senderElement.innerText = sender;
 			
+			if (sender == this.nickname) {
+				senderElement.className += " self";
+			}
+			
 			container.appendChild(senderElement);
 		} else {
 			container.className += " meta";
