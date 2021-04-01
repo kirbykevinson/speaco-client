@@ -8,6 +8,18 @@
 	--shadow-color: #808080;
 }
 
+* {
+	image-rendering: -moz-crisp-edges;
+	image-rendering: pixelated;
+	scrollbar-color: #888888 #C0C0C0;
+	scrollbar-width: auto;
+}
+
+::selection {
+	background: #00007F;
+	color: #FFFFFF;
+}
+
 body {
 	display: flex;
 	flex-direction: column;
