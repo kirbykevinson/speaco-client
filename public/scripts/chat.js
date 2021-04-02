@@ -218,6 +218,18 @@ class Chat {
 			);
 			
 			break;
+		case "attachment-added":
+			if (typeof event.id != "string") {
+				this.error("server-sent attachment id isn't a string");
+				
+				console.log(event);
+				
+				return;
+			}
+			
+			this.attachmentId = event.id;
+			
+			break;
 		case "attachment-fetched":
 			if (typeof event.data != "string") {
 				this.error("server-sent attachment data isn't a string");
@@ -241,10 +253,13 @@ class Chat {
 	
 	sendMessage() {
 		this.sendEvent("message", {
-			text: this.elements.messageInput.value
+			text: this.elements.messageInput.value,
+			attachment: this.attachmentId
 		});
 		
 		this.elements.messageInput.value = "";
+		
+		this.unattachFile();
 	}
 	recieveMessage(sender, text, attachment, timestamp) {
 		// The messages should be scrolled only if the user didn't scroll
@@ -318,8 +333,38 @@ class Chat {
 	}
 	
 	attachFile() {
-		this.elements.attachButton.hidden = true;
-		this.elements.unattachButton.hidden = false;
+		const chooser = document.createElement("input");
+		
+		chooser.type = "file";
+		
+		chooser.addEventListener("change", () => {
+			const file = chooser.files[0]
+			
+			if (file.size > Math.pow(2, 19)) {
+				alert("The file is too large to attach");
+				
+				return;
+			}
+			
+			const reader = new FileReader();
+			
+			reader.addEventListener("error", () => {
+				this.error("couldn't read the file");
+			});
+			
+			reader.addEventListener("load", () => {
+				this.sendEvent("add-attachment", {
+					data: reader.result
+				});
+				
+				this.elements.attachButton.hidden = true;
+				this.elements.unattachButton.hidden = false;
+			});
+			
+			reader.readAsDataURL(file);
+		});
+		
+		chooser.click();
 	}
 	unattachFile() {
 		this.attachmentId = null;
