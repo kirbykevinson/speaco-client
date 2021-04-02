@@ -258,8 +258,14 @@ class Chat {
 	}
 	
 	sendMessage() {
+		const message = this.elements.messageInput.value.trim();
+		
+		if (message.length <= 0) {
+			return;
+		}
+		
 		this.sendEvent("message", {
-			text: this.elements.messageInput.value,
+			text: message,
 			attachment: this.attachmentId
 		});
 		
