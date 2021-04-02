@@ -164,11 +164,14 @@ button:hover:active {
 	margin-top: 1em;
 }
 
+#chat-form > *:not(:last-child) {
+	margin-right: 1em;
+}
+
 #message-input {
 	flex-grow: 1;
 	min-width: 0;
 	height: 3em;
-	margin-right: 1em;
 	resize: none;
 }
 

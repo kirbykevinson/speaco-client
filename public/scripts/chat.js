@@ -12,10 +12,19 @@ class Chat {
 			
 			joinButton: document.querySelector("#join-button"),
 			sendButton: document.querySelector("#send-button"),
+			attachButton: document.querySelector("#attach-button"),
+			unattachButton: document.querySelector("#unattach-button"),
 			
 			messages: document.querySelector("#messages"),
 			messageInput: document.querySelector("#message-input"),
 		};
+		
+		this.serverIp = null;
+		this.nickname = null;
+		
+		this.socket = null;
+		
+		this.attachmentId = null;
 		
 		this.elements.registrationForm.addEventListener(
 			"submit",
@@ -32,6 +41,17 @@ class Chat {
 			this.sendMessage();
 		});
 		
+		this.elements.attachButton.addEventListener("click", (event) => {
+			event.preventDefault();
+			
+			this.attachFile();
+		});
+		this.elements.unattachButton.addEventListener("click", (event) => {
+			event.preventDefault();
+			
+			this.unattachFile();
+		});
+		
 		// We assume that if the device has a mouse, it also has a
 		// keyboard. This is not the right way to do it, but there isn't a
 		// better one
@@ -45,11 +65,6 @@ class Chat {
 				}
 			});
 		}
-		
-		this.serverIp = null;
-		this.nickname = null;
-		
-		this.socket = null;
 		
 		this.close();
 	}
@@ -78,6 +93,8 @@ class Chat {
 		
 		this.elements.messages.innerHTML = "";
 		this.elements.messageInput.value = "";
+		
+		this.unattachFile();
 	}
 	
 	join() {
@@ -298,6 +315,17 @@ class Chat {
 		if (shouldScroll) {
 			this.elements.messages.scrollTop = this.elements.messages.scrollHeight;
 		}
+	}
+	
+	attachFile() {
+		this.elements.attachButton.hidden = true;
+		this.elements.unattachButton.hidden = false;
+	}
+	unattachFile() {
+		this.attachmentId = null;
+		
+		this.elements.attachButton.hidden = false;
+		this.elements.unattachButton.hidden = true;
 	}
 	
 	downloadAttachment(data) {
