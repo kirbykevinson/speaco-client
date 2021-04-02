@@ -383,7 +383,7 @@ class Chat {
 		const link = document.createElement("a");
 		
 		link.href = data;
-		link.target = "_blank";
+		link.download = true;
 		
 		link.click();
 	}
