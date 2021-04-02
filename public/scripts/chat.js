@@ -269,7 +269,7 @@ class Chat {
 	sendMessage() {
 		const message = this.elements.messageInput.value.trim();
 		
-		if (message.length <= 0) {
+		if (message.length <= 0 && !this.attachmentId) {
 			return;
 		}
 		
