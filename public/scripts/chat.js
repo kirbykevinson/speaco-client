@@ -178,6 +178,13 @@ class Chat {
 				
 				return;
 			}
+			if (event.attachment && typeof event.attachment != "string") {
+				this.error("server-sent message attachment isn't a string");
+				
+				console.log(event);
+				
+				return;
+			}
 			if (typeof event.timestamp != "string") {
 				this.error("server-sent message timestamp isn't a string");
 				
@@ -189,8 +196,21 @@ class Chat {
 			this.recieveMessage(
 				event.sender,
 				event.text,
+				event.attachment,
 				new Date(event.timestamp)
 			);
+			
+			break;
+		case "attachment-fetched":
+			if (typeof event.data != "string") {
+				this.error("server-sent attachment data isn't a string");
+				
+				console.log(event);
+				
+				return;
+			}
+			
+			this.downloadAttachment(event.data);
 			
 			break;
 		default:
@@ -209,7 +229,7 @@ class Chat {
 		
 		this.elements.messageInput.value = "";
 	}
-	recieveMessage(sender, text, timestamp) {
+	recieveMessage(sender, text, attachment, timestamp) {
 		// The messages should be scrolled only if the user didn't scroll
 		// them manually, so we need to detect if that happened
 		
@@ -252,6 +272,20 @@ class Chat {
 		
 		container.appendChild(textElement);
 		
+		if (attachment) {
+			const attachmentElement = document.createElement("button");
+			
+			attachmentElement.innerText = "Download attachment";
+			
+			attachmentElement.addEventListener("click", () => {
+				this.sendEvent("fetch-attachment", {
+					id: attachment
+				});
+			});
+			
+			container.appendChild(attachmentElement);
+		}
+		
 		const timestampElement = document.createElement("span");
 		
 		timestampElement.className = "timestamp";
@@ -264,6 +298,15 @@ class Chat {
 		if (shouldScroll) {
 			this.elements.messages.scrollTop = this.elements.messages.scrollHeight;
 		}
+	}
+	
+	downloadAttachment(data) {
+		const link = document.createElement("a");
+		
+		link.href = data;
+		link.target = "_blank";
+		
+		link.click();
 	}
 }
 

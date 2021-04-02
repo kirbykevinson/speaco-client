@@ -147,6 +147,10 @@ button:hover:active {
 	content: ": ";
 }
 
+.message button {
+	margin-left: 0.5em;
+}
+
 .message .timestamp {
 	margin-left: 1rem;
 	vertical-align: middle;
