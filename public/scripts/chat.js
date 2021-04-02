@@ -1,5 +1,21 @@
 class Chat {
 	constructor() {
+		this.serverIp = null;
+		this.nickname = null;
+		
+		this.socket = null;
+		
+		this.attachmentId = null;
+		
+		this.eventHandlers = {
+			"welcome": this.onWelcome,
+			"bye": this.onBye,
+			"error": this.onError,
+			"message": this.onMessage,
+			"attachment-added": this.onAttachmentAdded,
+			"attachment-fetched": this.onAttachmentFetched
+		};
+		
 		this.elements = {
 			registration: document.querySelector("#registration"),
 			chat: document.querySelector("#chat"),
@@ -18,13 +34,6 @@ class Chat {
 			messages: document.querySelector("#messages"),
 			messageInput: document.querySelector("#message-input"),
 		};
-		
-		this.serverIp = null;
-		this.nickname = null;
-		
-		this.socket = null;
-		
-		this.attachmentId = null;
 		
 		this.elements.registrationForm.addEventListener(
 			"submit",
@@ -113,45 +122,57 @@ class Chat {
 		
 		this.socket = new WebSocket("ws://" + this.serverIp);
 		
-		this.socket.addEventListener("error", (event) => {
+		this.socket.addEventListener("error", () => {
 			this.error("couldn't connect to the server");
 		});
-		this.socket.addEventListener("close", (event) => {
+		this.socket.addEventListener("close", () => {
 			this.close();
 		});
 		
-		this.socket.addEventListener("open", (event) => {
+		this.socket.addEventListener("open", () => {
 			this.sendEvent("join", {
 				nickname: this.nickname
 			});
 		});
 		
-		this.socket.addEventListener("message", (event) => {
-			let parsedEvent = null;
+		this.socket.addEventListener("message", (message) => {
+			let event = null;
 			
 			try {
-				parsedEvent = JSON.parse(event.data);
+				event = JSON.parse(message.data);
 			} catch (error) {
 				this.error("malformed server-sent event");
 				
-				console.log(event.data);
+				console.log(message.data);
 				
 				return;
 			}
 			
-			if (!parsedEvent || typeof parsedEvent != "object") {
+			if (!event || typeof event != "object") {
 				this.error("server-sent event is not an object");
 				
-				return;
-			}
-			
-			if (!("type" in parsedEvent)) {
-				this.error("server-sent event without a type");
+				console.log(event);
 				
 				return;
 			}
 			
-			this.recieveEvent(parsedEvent);
+			if (!("type" in event)) {
+				this.error("server-sent event without a type");
+				
+				console.log(event);
+				
+				return;
+			}
+			
+			if (!this.eventHandlers.hasOwnProperty(event.type)) {
+				this.error("illegal server-sent event type");
+				
+				console.log(event);
+				
+				return;
+			}
+			
+			this.eventHandlers[event.type].call(this, event);
 		});
 	}
 	
@@ -164,91 +185,76 @@ class Chat {
 		
 		this.socket.send(JSON.stringify(data));
 	}
-	recieveEvent(event) {
-		switch (event.type) {
-		case "welcome":
-			this.open();
-			
-			break;
-		case "bye":
-			alert("You've been kicked");
-			
-			this.close();
-			
-			break;
-		case "error":
-			this.error(event.message);
-			
-			break;
-		case "message":
-			if (event.sender && typeof event.sender != "string") {
-				this.error("invalid server-sent message sender");
-				
-				console.log(event);
-				
-				return;
-			}
-			if (typeof event.text != "string") {
-				this.error("server-sent message text isn't a string");
-				
-				console.log(event);
-				
-				return;
-			}
-			if (event.attachment && typeof event.attachment != "string") {
-				this.error("server-sent message attachment isn't a string");
-				
-				console.log(event);
-				
-				return;
-			}
-			if (typeof event.timestamp != "string") {
-				this.error("server-sent message timestamp isn't a string");
-				
-				console.log(event);
-				
-				return;
-			}
-			
-			this.recieveMessage(
-				event.sender,
-				event.text,
-				event.attachment,
-				new Date(event.timestamp)
-			);
-			
-			break;
-		case "attachment-added":
-			if (typeof event.id != "string") {
-				this.error("server-sent attachment id isn't a string");
-				
-				console.log(event);
-				
-				return;
-			}
-			
-			this.attachmentId = event.id;
-			
-			break;
-		case "attachment-fetched":
-			if (typeof event.data != "string") {
-				this.error("server-sent attachment data isn't a string");
-				
-				console.log(event);
-				
-				return;
-			}
-			
-			this.downloadAttachment(event.data);
-			
-			break;
-		default:
-			this.error("illegal server-sent event type");
+	
+	onWelcome() {
+		this.open();
+	}
+	onBye() {
+		alert("You've been kicked");
+		
+		this.close();
+	}
+	onError(event) {
+		this.error(event.message);
+	}
+	onMessage(event) {
+		if (event.sender && typeof event.sender != "string") {
+			this.error("invalid server-sent message sender");
 			
 			console.log(event);
 			
-			break;
+			return;
 		}
+		if (typeof event.text != "string") {
+			this.error("server-sent message text isn't a string");
+			
+			console.log(event);
+			
+			return;
+		}
+		if (event.attachment && typeof event.attachment != "string") {
+			this.error("server-sent message attachment isn't a string");
+			
+			console.log(event);
+			
+			return;
+		}
+		if (typeof event.timestamp != "string") {
+			this.error("server-sent message timestamp isn't a string");
+			
+			console.log(event);
+			
+			return;
+		}
+		
+		this.recieveMessage(
+			event.sender,
+			event.text,
+			event.attachment,
+			new Date(event.timestamp)
+		);
+	}
+	onAttachmentAdded(event) {
+		if (typeof event.id != "string") {
+			this.error("server-sent attachment id isn't a string");
+			
+			console.log(event);
+			
+			return;
+		}
+		
+		this.attachmentId = event.id;
+	}
+	onAttachmentFetched(event) {
+		if (typeof event.data != "string") {
+			this.error("server-sent attachment data isn't a string");
+			
+			console.log(event);
+			
+			return;
+		}
+		
+		this.downloadAttachment(event.data);
 	}
 	
 	sendMessage() {
