@@ -16,6 +16,12 @@ class Chat {
 			"attachment-fetched": this.onAttachmentFetched
 		};
 		
+		this.limits = {
+			nicknameLength: 32,
+			messageLength: 1024,
+			attachmentSize: 3 * 2 ** 20
+		};
+		
 		this.elements = {
 			registration: document.querySelector("#registration"),
 			chat: document.querySelector("#chat"),
@@ -34,6 +40,9 @@ class Chat {
 			messages: document.querySelector("#messages"),
 			messageInput: document.querySelector("#message-input"),
 		};
+		
+		this.elements.nickname.maxLength = this.limits.nicknameLength;
+		this.elements.messageInput.maxLength = this.limits.messageLength;
 		
 		this.elements.registrationForm.addEventListener(
 			"submit",
@@ -352,7 +361,7 @@ class Chat {
 		chooser.addEventListener("change", () => {
 			const file = chooser.files[0]
 			
-			if (file.size > Math.pow(2, 19)) {
+			if (file.size > this.limits.attachmentSize) {
 				alert("The file is too large to attach");
 				
 				return;
