@@ -63,7 +63,7 @@ class Chat {
 		});
 		
 		this.elements.cancelEditButton.addEventListener("click", (event) => {
-			this.setMessageId(null);
+			this.setEditedMessage(null);
 		});
 		
 		this.elements.attachButton.addEventListener("click", (event) => {
@@ -104,7 +104,7 @@ class Chat {
 		this.previousMessage = "";
 		this.previousAttachmentId = null;
 		
-		this.setMessageId(null);
+		this.setEditedMessage(null);
 	}
 	
 	open() {
@@ -220,7 +220,7 @@ class Chat {
 		this.error(event.message);
 	}
 	onMessage(event) {
-		if (!this.checkMessageCorrectness(event)) {
+		if (!this.checkMessageEvent(event)) {
 			return;
 		}
 		
@@ -235,7 +235,7 @@ class Chat {
 		this.recieveMessage(event);
 	}
 	onMessageEdited(event) {
-		if (!this.checkMessageCorrectness(event)) {
+		if (!this.checkMessageEvent(event)) {
 			return;
 		}
 		
@@ -297,7 +297,7 @@ class Chat {
 		this.downloadAttachment(event.data);
 	}
 	
-	checkMessageCorrectness(event) {
+	checkMessageEvent(event) {
 		if (event.sender && typeof event.sender != "string") {
 			this.error("invalid server-sent message sender");
 			
@@ -343,7 +343,7 @@ class Chat {
 			});
 		}
 		
-		this.setMessageId(null);
+		this.setEditedMessage(null);
 	}
 	recieveMessage(message) {
 		// The messages should be scrolled only if the user didn't scroll
@@ -423,10 +423,10 @@ class Chat {
 			
 			editButton.addEventListener("click", () => {
 				if (this.messageId != null) {
-					this.setMessageId(null);
+					this.setEditedMessage(null);
 				}
 				
-				this.setMessageId(container.chat.id, container);
+				this.setEditedMessage(container.chat.id, container);
 			});
 			
 			const deleteButton = document.createElement("button")
@@ -478,19 +478,19 @@ class Chat {
 			}
 		}
 	}
-	setMessageId(id, message) {
+	setEditedMessage(id, container) {
 		this.messageId = id;
 		
 		if (id != null) {
 			this.elements.cancelEditButton.hidden = false;
 			
-			if (message) {
+			if (container) {
 				this.previousMessage = this.elements.messageInput.value;
 				this.previousAttachmentId = this.attachmentId;
 				
 				this.elements.messageInput.value =
-					message.querySelector(".text").innerText;
-				this.setAttachmentId(message.chat.attachment);
+					container.querySelector(".text").innerText;
+				this.setAttachmentId(container.chat.attachment);
 			}
 		} else {
 			this.elements.cancelEditButton.hidden = true;
