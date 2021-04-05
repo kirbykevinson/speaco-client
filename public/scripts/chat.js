@@ -12,6 +12,7 @@ class Chat {
 			"bye": this.onBye,
 			"error": this.onError,
 			"message": this.onMessage,
+			"message-deleted": this.onMessageDeleted,
 			"attachment-added": this.onAttachmentAdded,
 			"attachment-fetched": this.onAttachmentFetched
 		};
@@ -238,6 +239,24 @@ class Chat {
 		
 		this.recieveMessage(event);
 	}
+	onMessageDeleted(event) {
+		if (typeof event.sender != "string") {
+			this.error("server-sent message sender isn't a string");
+			
+			console.log(event);
+			
+			return;
+		}
+		if (typeof event.id != "number") {
+			this.error("server-sent message id isn't a number");
+			
+			console.log(event);
+			
+			return;
+		}
+		
+		this.deleteMessage(event.sender, event.id);
+	}
 	onAttachmentAdded(event) {
 		if (typeof event.id != "string") {
 			this.error("server-sent attachment id isn't a string");
@@ -295,6 +314,11 @@ class Chat {
 		
 		const container = document.createElement("p");
 		
+		container.chat = {
+			sender: message.sender,
+			id: message.id
+		};
+		
 		container.className = "message";
 		
 		if (message.sender) {
@@ -351,6 +375,14 @@ class Chat {
 			
 			deleteButton.innerText = "❌";
 			
+			deleteButton.addEventListener("click", () => {
+				if (confirm("Do you really want to delete this message?")) {
+					this.sendEvent("delete-message", {
+						id: message.id
+					});
+				}
+			});
+			
 			buttonContainer.appendChild(editButton);
 			buttonContainer.appendChild(deleteButton);
 			
@@ -369,6 +401,13 @@ class Chat {
 		
 		if (shouldScroll) {
 			this.elements.messages.scrollTop = this.elements.messages.scrollHeight;
+		}
+	}
+	deleteMessage(sender, id) {
+		for (const message of document.querySelectorAll(".message")) {
+			if (message.chat.sender == sender && message.chat.id == id) {
+				message.remove();
+			}
 		}
 	}
 	
