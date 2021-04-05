@@ -508,7 +508,7 @@ class Chat {
 				target.chat.sender == message.sender &&
 				target.chat.id == message.id
 			) {
-				// TODO
+				this.renderMessage(message, target);
 				
 				return;
 			}
