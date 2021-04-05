@@ -68,7 +68,7 @@ class Chat {
 		this.elements.unattachButton.addEventListener("click", (event) => {
 			event.preventDefault();
 			
-			this.unattachFile();
+			this.setAttachmentId(null);
 		});
 		
 		// We assume that if the device has a mouse, it also has a
@@ -113,7 +113,7 @@ class Chat {
 		this.elements.messages.innerHTML = "";
 		this.elements.messageInput.value = "";
 		
-		this.unattachFile();
+		this.setAttachmentId(null);
 	}
 	
 	join() {
@@ -266,7 +266,7 @@ class Chat {
 			return;
 		}
 		
-		this.attachmentId = event.id;
+		this.setAttachmentId(event.id);
 	}
 	onAttachmentFetched(event) {
 		if (typeof event.data != "string") {
@@ -294,7 +294,7 @@ class Chat {
 		
 		this.elements.messageInput.value = "";
 		
-		this.unattachFile();
+		this.setAttachmentId(null);
 	}
 	recieveMessage(message) {
 		// The messages should be scrolled only if the user didn't scroll
@@ -436,20 +436,22 @@ class Chat {
 					data: reader.result
 				});
 				
-				this.elements.attachButton.hidden = true;
-				this.elements.unattachButton.hidden = false;
 			});
-			
 			reader.readAsDataURL(file);
 		});
 		
 		chooser.click();
 	}
-	unattachFile() {
-		this.attachmentId = null;
+	setAttachmentId(id) {
+		this.attachmentId = id;
 		
-		this.elements.attachButton.hidden = false;
-		this.elements.unattachButton.hidden = true;
+		if (id) {
+			this.elements.attachButton.hidden = true;
+			this.elements.unattachButton.hidden = false;
+		} else {
+			this.elements.attachButton.hidden = false;
+			this.elements.unattachButton.hidden = true;
+		}
 	}
 	
 	downloadAttachment(data) {
