@@ -5,6 +5,7 @@ class Chat {
 		
 		this.socket = null;
 		
+		this.messageId = null;
 		this.attachmentId = null;
 		
 		this.eventHandlers = {
@@ -12,6 +13,7 @@ class Chat {
 			"bye": this.onBye,
 			"error": this.onError,
 			"message": this.onMessage,
+			"message-edited": this.onMessageEdited,
 			"message-deleted": this.onMessageDeleted,
 			"attachment-added": this.onAttachmentAdded,
 			"attachment-fetched": this.onAttachmentFetched
@@ -94,6 +96,13 @@ class Chat {
 		this.close();
 	}
 	
+	reset() {
+		this.elements.messageInput.value = "";
+		
+		this.setMessageId(null);
+		this.setAttachmentId(null);
+	}
+	
 	open() {
 		this.elements.registration.hidden = true;
 		this.elements.chat.hidden = false;
@@ -111,9 +120,8 @@ class Chat {
 		this.elements.chat.hidden = true;
 		
 		this.elements.messages.innerHTML = "";
-		this.elements.messageInput.value = "";
 		
-		this.setAttachmentId(null);
+		this.reset();
 	}
 	
 	join() {
@@ -208,36 +216,41 @@ class Chat {
 		this.error(event.message);
 	}
 	onMessage(event) {
-		if (event.sender && typeof event.sender != "string") {
-			this.error("invalid server-sent message sender");
-			
-			console.log(event);
-			
+		if (!this.checkMessageCorrectness(event)) {
 			return;
 		}
-		if (typeof event.text != "string") {
-			this.error("server-sent message text isn't a string");
-			
-			console.log(event);
-			
-			return;
-		}
-		if (event.attachment && typeof event.attachment != "string") {
-			this.error("server-sent message attachment isn't a string");
-			
-			console.log(event);
-			
-			return;
-		}
+		
 		if (typeof event.timestamp != "string") {
 			this.error("server-sent message timestamp isn't a string");
+			
+			console.log(event);
+			
+			return false;
+		}
+		
+		this.recieveMessage(event);
+	}
+	onMessageEdited(event) {
+		if (!this.checkMessageCorrectness(event)) {
+			return;
+		}
+		
+		if (typeof event.sender != "string") {
+			this.error("server-sent message sender isn't a string");
+			
+			console.log(event);
+			
+			return;
+		}
+		if (typeof event.id != "number") {
+			this.error("server-sent message id isn't a number");
 			
 			console.log(event);
 			
 			return;
 		}
 		
-		this.recieveMessage(event);
+		this.editMessage(event);
 	}
 	onMessageDeleted(event) {
 		if (typeof event.sender != "string") {
@@ -280,6 +293,32 @@ class Chat {
 		this.downloadAttachment(event.data);
 	}
 	
+	checkMessageCorrectness(event) {
+		if (event.sender && typeof event.sender != "string") {
+			this.error("invalid server-sent message sender");
+			
+			console.log(event);
+			
+			return false;
+		}
+		if (typeof event.text != "string") {
+			this.error("server-sent message text isn't a string");
+			
+			console.log(event);
+			
+			return false;
+		}
+		if (event.attachment && typeof event.attachment != "string") {
+			this.error("server-sent message attachment isn't a string");
+			
+			console.log(event);
+			
+			return false;
+		}
+		
+		return true;
+	}
+	
 	sendMessage() {
 		const message = this.elements.messageInput.value.trim();
 		
@@ -287,14 +326,20 @@ class Chat {
 			return;
 		}
 		
-		this.sendEvent("message", {
-			text: message,
-			attachment: this.attachmentId
-		});
+		if (this.messageId == null) {
+			this.sendEvent("message", {
+				text: message,
+				attachment: this.attachmentId
+			});
+		} else {
+			this.sendEvent("edit-message", {
+				id: this.messageId,
+				text: message,
+				attachment: this.attachmentId
+			});
+		}
 		
-		this.elements.messageInput.value = "";
-		
-		this.setAttachmentId(null);
+		this.reset();
 	}
 	recieveMessage(message) {
 		// The messages should be scrolled only if the user didn't scroll
@@ -316,7 +361,8 @@ class Chat {
 		
 		container.chat = {
 			sender: message.sender,
-			id: message.id
+			id: message.id,
+			attachment: message.attachment
 		};
 		
 		container.className = "message";
@@ -355,7 +401,7 @@ class Chat {
 			
 			attachmentElement.addEventListener("click", () => {
 				this.sendEvent("fetch-attachment", {
-					id: message.attachment
+					id: container.chat.attachment
 				});
 			});
 			
@@ -371,6 +417,10 @@ class Chat {
 			
 			editButton.innerText = "🖋️";
 			
+			editButton.addEventListener("click", () => {
+				this.setMessageId(container.chat.id, container);
+			});
+			
 			const deleteButton = document.createElement("button")
 			
 			deleteButton.innerText = "❌";
@@ -378,7 +428,7 @@ class Chat {
 			deleteButton.addEventListener("click", () => {
 				if (confirm("Do you really want to delete this message?")) {
 					this.sendEvent("delete-message", {
-						id: message.id
+						id: container.chat.id
 					});
 				}
 			});
@@ -403,11 +453,31 @@ class Chat {
 			this.elements.messages.scrollTop = this.elements.messages.scrollHeight;
 		}
 	}
+	editMessage(message) {
+		for (const message of document.querySelectorAll(".message")) {
+			if (
+				message.chat.sender == message.sender &&
+				message.chat.id == message.id
+			) {
+				// TODO
+			}
+		}
+	}
 	deleteMessage(sender, id) {
 		for (const message of document.querySelectorAll(".message")) {
 			if (message.chat.sender == sender && message.chat.id == id) {
 				message.remove();
 			}
+		}
+	}
+	setMessageId(id, message) {
+		this.messageId = id;
+		
+		if (message) {
+			this.elements.messageInput.value =
+				message.querySelector(".text").innerText;
+			
+			this.setAttachmentId(message.chat.attachment);
 		}
 	}
 	
