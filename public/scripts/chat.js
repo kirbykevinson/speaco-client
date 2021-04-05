@@ -321,7 +321,11 @@ class Chat {
 		
 		textElement.className = "text";
 		textElement.innerText = text;
-		textElement.innerHTML = textElement.innerHTML.replace(/\n/g, "<br>");
+		
+		textElement.innerHTML = textElement.innerHTML.replace(
+			/\S*:\/\/\S*/g,
+			"<a href=\"$&\">$&</a>"
+		);
 		
 		container.appendChild(textElement);
 		
