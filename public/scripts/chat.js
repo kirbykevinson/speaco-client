@@ -345,6 +345,31 @@ class Chat {
 		
 		this.setEditedMessage(null);
 	}
+	setEditedMessage(id, container) {
+		this.messageId = id;
+		
+		if (id != null) {
+			this.elements.cancelEditButton.hidden = false;
+			
+			if (container) {
+				this.previousMessage = this.elements.messageInput.value;
+				this.previousAttachmentId = this.attachmentId;
+				
+				this.elements.messageInput.value =
+					container.querySelector(".text").innerText;
+				this.setAttachmentId(container.chat.attachment);
+			}
+		} else {
+			this.elements.cancelEditButton.hidden = true;
+			
+			this.elements.messageInput.value = this.previousMessage;
+			this.setAttachmentId(this.previousAttachmentId);
+			
+			this.previousMessage = "";
+			this.previousAttachmentId = null;
+		}
+	}
+	
 	recieveMessage(message) {
 		// The messages should be scrolled only if the user didn't scroll
 		// them manually, so we need to detect if that happened
@@ -363,13 +388,26 @@ class Chat {
 		
 		const container = document.createElement("p");
 		
+		container.className = "message";
+		
+		this.renderMessage(message, container);
+		
+		this.elements.messages.appendChild(container);
+		
+		if (shouldScroll) {
+			this.elements.messages.scrollTop = this.elements.messages.scrollHeight;
+		}
+	}
+	renderMessage(message, container) {
+		container.innerHTML = "";
+		
 		container.chat = {
 			sender: message.sender,
 			id: message.id,
 			attachment: message.attachment
 		};
 		
-		container.className = "message";
+		// ---
 		
 		if (message.sender) {
 			const senderElement = document.createElement("span");
@@ -386,6 +424,8 @@ class Chat {
 			container.className += " meta";
 		}
 		
+		// ---
+		
 		const textElement = document.createElement("span");
 		
 		textElement.className = "text";
@@ -397,6 +437,8 @@ class Chat {
 		);
 		
 		container.appendChild(textElement);
+		
+		// ---
 		
 		if (message.attachment) {
 			const attachmentElement = document.createElement("button");
@@ -411,6 +453,8 @@ class Chat {
 			
 			container.appendChild(attachmentElement);
 		}
+		
+		// ---
 		
 		if (message.sender == this.nickname) {
 			const buttonContainer = document.createElement("span");
@@ -447,6 +491,8 @@ class Chat {
 			container.appendChild(buttonContainer);
 		}
 		
+		// ---
+		
 		const timestampElement = document.createElement("span");
 		
 		timestampElement.className = "timestamp";
@@ -454,20 +500,17 @@ class Chat {
 			new Date(message.timestamp).toLocaleString();
 		
 		container.appendChild(timestampElement);
-		
-		this.elements.messages.appendChild(container);
-		
-		if (shouldScroll) {
-			this.elements.messages.scrollTop = this.elements.messages.scrollHeight;
-		}
 	}
+	
 	replaceMessage(message) {
-		for (const message of document.querySelectorAll(".message")) {
+		for (const target of document.querySelectorAll(".message")) {
 			if (
-				message.chat.sender == message.sender &&
-				message.chat.id == message.id
+				target.chat.sender == message.sender &&
+				target.chat.id == message.id
 			) {
 				// TODO
+				
+				return;
 			}
 		}
 	}
@@ -476,30 +519,6 @@ class Chat {
 			if (message.chat.sender == sender && message.chat.id == id) {
 				message.remove();
 			}
-		}
-	}
-	setEditedMessage(id, container) {
-		this.messageId = id;
-		
-		if (id != null) {
-			this.elements.cancelEditButton.hidden = false;
-			
-			if (container) {
-				this.previousMessage = this.elements.messageInput.value;
-				this.previousAttachmentId = this.attachmentId;
-				
-				this.elements.messageInput.value =
-					container.querySelector(".text").innerText;
-				this.setAttachmentId(container.chat.attachment);
-			}
-		} else {
-			this.elements.cancelEditButton.hidden = true;
-			
-			this.elements.messageInput.value = this.previousMessage;
-			this.setAttachmentId(this.previousAttachmentId);
-			
-			this.previousMessage = "";
-			this.previousAttachmentId = null;
 		}
 	}
 	
