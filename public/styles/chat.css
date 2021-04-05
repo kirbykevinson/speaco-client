@@ -181,9 +181,12 @@ button:hover:active {
 	color: #0000003F;
 }
 
+#chat-form, #cancel-edit-button {
+	margin-top: 1em;
+}
+
 #chat-form {
 	display: flex;
-	margin-top: 1em;
 }
 
 #chat-form > *:not(:last-child) {

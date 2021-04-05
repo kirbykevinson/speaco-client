@@ -8,6 +8,9 @@ class Chat {
 		this.messageId = null;
 		this.attachmentId = null;
 		
+		this.previousMessage = "";
+		this.previousAttachmentId = null;
+		
 		this.eventHandlers = {
 			"welcome": this.onWelcome,
 			"bye": this.onBye,
@@ -36,9 +39,10 @@ class Chat {
 			nickname: document.querySelector("#nickname"),
 			
 			joinButton: document.querySelector("#join-button"),
-			sendButton: document.querySelector("#send-button"),
+			cancelEditButton: document.querySelector("#cancel-edit-button"),
 			attachButton: document.querySelector("#attach-button"),
 			unattachButton: document.querySelector("#unattach-button"),
+			sendButton: document.querySelector("#send-button"),
 			
 			messages: document.querySelector("#messages"),
 			messageInput: document.querySelector("#message-input"),
@@ -47,19 +51,19 @@ class Chat {
 		this.elements.nickname.maxLength = this.limits.nicknameLength;
 		this.elements.messageInput.maxLength = this.limits.messageLength;
 		
-		this.elements.registrationForm.addEventListener(
-			"submit",
-			
-			(event) => {
+		this.elements.registrationForm.addEventListener("submit", (event) => {
 				event.preventDefault();
 				
 				this.join();
-			}
-		);
+		});
 		this.elements.chatForm.addEventListener("submit", (event) => {
 			event.preventDefault();
 			
 			this.sendMessage();
+		});
+		
+		this.elements.cancelEditButton.addEventListener("click", (event) => {
+			this.setMessageId(null);
 		});
 		
 		this.elements.attachButton.addEventListener("click", (event) => {
@@ -97,10 +101,10 @@ class Chat {
 	}
 	
 	reset() {
-		this.elements.messageInput.value = "";
+		this.previousMessage = "";
+		this.previousAttachmentId = null;
 		
 		this.setMessageId(null);
-		this.setAttachmentId(null);
 	}
 	
 	open() {
@@ -339,7 +343,7 @@ class Chat {
 			});
 		}
 		
-		this.reset();
+		this.setMessageId(null);
 	}
 	recieveMessage(message) {
 		// The messages should be scrolled only if the user didn't scroll
@@ -473,11 +477,25 @@ class Chat {
 	setMessageId(id, message) {
 		this.messageId = id;
 		
-		if (message) {
-			this.elements.messageInput.value =
-				message.querySelector(".text").innerText;
+		if (id != null) {
+			this.elements.cancelEditButton.hidden = false;
 			
-			this.setAttachmentId(message.chat.attachment);
+			if (message) {
+				this.previousMessage = this.elements.messageInput.value;
+				this.previousAttachmentId = this.attachmentId;
+				
+				this.elements.messageInput.value =
+					message.querySelector(".text").innerText;
+				this.setAttachmentId(message.chat.attachment);
+			}
+		} else {
+			this.elements.cancelEditButton.hidden = true;
+			
+			this.elements.messageInput.value = this.previousMessage;
+			this.setAttachmentId(this.previousAttachmentId);
+			
+			this.previousMessage = "";
+			this.previousAttachmentId = null;
 		}
 	}
 	
@@ -515,7 +533,7 @@ class Chat {
 	setAttachmentId(id) {
 		this.attachmentId = id;
 		
-		if (id) {
+		if (id != null) {
 			this.elements.attachButton.hidden = true;
 			this.elements.unattachButton.hidden = false;
 		} else {
