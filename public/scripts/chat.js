@@ -236,12 +236,7 @@ class Chat {
 			return;
 		}
 		
-		this.recieveMessage(
-			event.sender,
-			event.text,
-			event.attachment,
-			new Date(event.timestamp)
-		);
+		this.recieveMessage(event);
 	}
 	onAttachmentAdded(event) {
 		if (typeof event.id != "string") {
@@ -282,7 +277,7 @@ class Chat {
 		
 		this.unattachFile();
 	}
-	recieveMessage(sender, text, attachment, timestamp) {
+	recieveMessage(message) {
 		// The messages should be scrolled only if the user didn't scroll
 		// them manually, so we need to detect if that happened
 		
@@ -302,13 +297,13 @@ class Chat {
 		
 		container.className = "message";
 		
-		if (sender) {
+		if (message.sender) {
 			const senderElement = document.createElement("span");
 			
 			senderElement.className = "sender";
-			senderElement.innerText = sender;
+			senderElement.innerText = message.sender;
 			
-			if (sender == this.nickname) {
+			if (message.sender == this.nickname) {
 				senderElement.className += " self";
 			}
 			
@@ -320,7 +315,7 @@ class Chat {
 		const textElement = document.createElement("span");
 		
 		textElement.className = "text";
-		textElement.innerText = text;
+		textElement.innerText = message.text;
 		
 		textElement.innerHTML = textElement.innerHTML.replace(
 			/\S*:\/\/\S*/g,
@@ -329,14 +324,14 @@ class Chat {
 		
 		container.appendChild(textElement);
 		
-		if (attachment) {
+		if (message.attachment) {
 			const attachmentElement = document.createElement("button");
 			
 			attachmentElement.innerText = "Download attachment";
 			
 			attachmentElement.addEventListener("click", () => {
 				this.sendEvent("fetch-attachment", {
-					id: attachment
+					id: message.attachment
 				});
 			});
 			
@@ -346,7 +341,8 @@ class Chat {
 		const timestampElement = document.createElement("span");
 		
 		timestampElement.className = "timestamp";
-		timestampElement.innerText = timestamp.toLocaleString();
+		timestampElement.innerText =
+			new Date(message.timestamp).toLocaleString();
 		
 		container.appendChild(timestampElement);
 		
