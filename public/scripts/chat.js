@@ -422,7 +422,9 @@ class Chat {
 			editButton.innerText = "🖋️";
 			
 			editButton.addEventListener("click", () => {
-				this.setMessageId(container.chat.id, container);
+				if (this.messageId == null) {
+					this.setMessageId(container.chat.id, container);
+				}
 			});
 			
 			const deleteButton = document.createElement("button")
