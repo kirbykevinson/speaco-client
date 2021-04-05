@@ -129,10 +129,13 @@ button:hover:active {
 .message {
 	margin: 0;
 }
-
 .message.meta {
 	font-weight: bold;
 	color: #007F00;
+}
+
+.message > * {
+	vertical-align: middle;
 }
 
 .message .sender {
@@ -147,13 +150,32 @@ button:hover:active {
 	content: ": ";
 }
 
-.message button {
+.message > button {
 	margin-left: 0.5em;
+}
+
+.message .buttons {
+	margin-left: 1em;
+}
+
+.message .buttons button {
+	padding: 0;
+	font-size: 0.75em;
+	border: none;
+	background: none;
+	opacity: 0.25;
+	filter: grayscale(1);
+}
+.message .buttons button:not(:last-child) {
+	margin-right: 0.5em;
+}
+
+.message .buttons button:hover {
+	opacity: 0.5;
 }
 
 .message .timestamp {
 	margin-left: 1rem;
-	vertical-align: middle;
 	font-size: 0.5em;
 	font-weight: normal;
 	color: #0000003F;

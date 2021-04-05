@@ -338,6 +338,25 @@ class Chat {
 			container.appendChild(attachmentElement);
 		}
 		
+		if (message.sender == this.nickname) {
+			const buttonContainer = document.createElement("span");
+			
+			buttonContainer.className = "buttons";
+			
+			const editButton = document.createElement("button")
+			
+			editButton.innerText = "🖋️";
+			
+			const deleteButton = document.createElement("button")
+			
+			deleteButton.innerText = "❌";
+			
+			buttonContainer.appendChild(editButton);
+			buttonContainer.appendChild(deleteButton);
+			
+			container.appendChild(buttonContainer);
+		}
+		
 		const timestampElement = document.createElement("span");
 		
 		timestampElement.className = "timestamp";
