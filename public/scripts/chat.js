@@ -254,7 +254,7 @@ class Chat {
 			return;
 		}
 		
-		this.editMessage(event);
+		this.replaceMessage(event);
 	}
 	onMessageDeleted(event) {
 		if (typeof event.sender != "string") {
@@ -461,7 +461,7 @@ class Chat {
 			this.elements.messages.scrollTop = this.elements.messages.scrollHeight;
 		}
 	}
-	editMessage(message) {
+	replaceMessage(message) {
 		for (const message of document.querySelectorAll(".message")) {
 			if (
 				message.chat.sender == message.sender &&
