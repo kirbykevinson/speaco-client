@@ -16,7 +16,7 @@ class Chat {
 			"bye": this.onBye,
 			"error": this.onError,
 			"message": this.onMessage,
-			"message-edited": this.onMessageEdited,
+			"message-updated": this.onMessageUpdated,
 			"message-deleted": this.onMessageDeleted,
 			"attachment-added": this.onAttachmentAdded,
 			"attachment-fetched": this.onAttachmentFetched
@@ -234,7 +234,7 @@ class Chat {
 		
 		this.recieveMessage(event);
 	}
-	onMessageEdited(event) {
+	onMessageUpdated(event) {
 		if (!this.checkMessageEvent(event)) {
 			return;
 		}
@@ -254,7 +254,7 @@ class Chat {
 			return;
 		}
 		
-		this.replaceMessage(event);
+		this.updateMessage(event);
 	}
 	onMessageDeleted(event) {
 		if (typeof event.sender != "string") {
@@ -502,7 +502,7 @@ class Chat {
 		container.appendChild(timestampElement);
 	}
 	
-	replaceMessage(message) {
+	updateMessage(message) {
 		for (const target of document.querySelectorAll(".message")) {
 			if (
 				target.chat.sender == message.sender &&
