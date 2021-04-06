@@ -346,6 +346,7 @@ class Chat {
 		
 		if (id != null) {
 			this.elements.cancelEditButton.hidden = false;
+			this.elements.sendButton.innerText = "☑️";
 			
 			if (container) {
 				this.previousMessage = this.elements.messageInput.value;
@@ -357,6 +358,7 @@ class Chat {
 			}
 		} else {
 			this.elements.cancelEditButton.hidden = true;
+			this.elements.sendButton.innerText = "➡️";
 			
 			this.elements.messageInput.value = this.previousMessage;
 			this.setAttachmentId(this.previousAttachmentId);
