@@ -24,6 +24,7 @@ class Chat {
 		
 		this.limits = {
 			nicknameLength: 32,
+			logSize: 128,
 			messageLength: 1024,
 			attachmentSize: 3 * 2 ** 20
 		};
@@ -393,6 +394,18 @@ class Chat {
 		this.renderMessage(message, container);
 		
 		this.elements.messages.appendChild(container);
+		
+		const logSize = this.elements.messages.children.length;
+		
+		if (logSize > this.limits.logSize) {
+			const buttons = this.elements.messages.children[
+				logSize - this.limits.logSize - 1
+			].querySelector(".buttons");
+			
+			if (buttons) {
+				buttons.remove();
+			}
+		}
 		
 		if (shouldScroll) {
 			this.elements.messages.scrollTop = this.elements.messages.scrollHeight;
