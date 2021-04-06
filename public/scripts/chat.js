@@ -26,7 +26,7 @@ class Chat {
 			nicknameLength: 32,
 			logSize: 128,
 			messageLength: 1024,
-			attachmentSize: 3 * 2 ** 20
+			attachmentSize: 5 * 2 ** 20
 		};
 		
 		this.elements = {
@@ -230,7 +230,7 @@ class Chat {
 			
 			console.log(event);
 			
-			return false;
+			return;
 		}
 		
 		this.recieveMessage(event);
@@ -543,7 +543,7 @@ class Chat {
 		chooser.addEventListener("change", () => {
 			const file = chooser.files[0]
 			
-			if (file.size > this.limits.attachmentSize) {
+			if (file.size > this.limits.attachmentSize / 1.5) {
 				alert("The file is too large to attach");
 				
 				return;
