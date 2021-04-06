@@ -98,6 +98,6 @@ the user.
 
 ### `attachment-fetched`
 
-Sent the the server finishes uploading the attachment to the user
+Sent when the server finishes uploading the attachment to the user
 
 * `data` - base64-encoded data URL of the attachment's file
