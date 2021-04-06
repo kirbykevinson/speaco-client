@@ -83,6 +83,8 @@ example, to the user than just joined).
 
 * `messages` - array of objects with the structure identical to the
   `message` event
+* `prepend` - if true, insert the messages in the beginning of the
+  conversation instead of the end
 
 ### `message-updated`
 

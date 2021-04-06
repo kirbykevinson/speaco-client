@@ -257,12 +257,18 @@ class Chat {
 			return;
 		}
 		
+		let insertBefore = null;
+		
+		if (event.prepend) {
+			insertBefore = this.elements.messages.children[0];
+		}
+		
 		for (const message of event.messages) {
 			if (!this.checkMessageEvent(message)) {
 				return;
 			}
 			
-			this.recieveMessage(message);
+			this.recieveMessage(message, insertBefore);
 		}
 	}
 	onMessageUpdated(event) {
@@ -410,7 +416,7 @@ class Chat {
 		}
 	}
 	
-	recieveMessage(message) {
+	recieveMessage(message, insertBefore) {
 		// The messages should be scrolled only if the user didn't scroll
 		// them manually, so we need to detect if that happened
 		
@@ -432,7 +438,7 @@ class Chat {
 		
 		this.renderMessage(message, container);
 		
-		this.elements.messages.appendChild(container);
+		this.elements.messages.insertBefore(container, insertBefore || null);
 		
 		const logSize = this.elements.messages.children.length;
 		
