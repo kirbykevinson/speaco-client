@@ -16,6 +16,7 @@ class Chat {
 			"bye": this.onBye,
 			"error": this.onError,
 			"message": this.onMessage,
+			"messages": this.onMessages,
 			"message-updated": this.onMessageUpdated,
 			"message-deleted": this.onMessageDeleted,
 			"attachment-added": this.onAttachmentAdded,
@@ -246,6 +247,23 @@ class Chat {
 		}
 		
 		this.recieveMessage(event);
+	}
+	onMessages(event) {
+		if (!Array.isArray(event.messages)) {
+			this.error("server-sent messages aren't an array");
+			
+			console.log(event);
+			
+			return;
+		}
+		
+		for (const message of event.messages) {
+			if (!this.checkMessageEvent(message)) {
+				return;
+			}
+			
+			this.recieveMessage(message);
+		}
 	}
 	onMessageUpdated(event) {
 		if (!this.checkMessageEvent(event)) {

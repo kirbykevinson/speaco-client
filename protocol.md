@@ -76,6 +76,14 @@ Sent when a new message arrives.
 * `attachment` - optional attachment ID
 * `timestamp` - time at which the message was first sent
 
+### `messages`
+
+Sent when the server wants to send many messages at a time (like, for
+example, to the user than just joined).
+
+* `messages` - array of objects with the structure identical to the
+  `message` event
+
 ### `message-updated`
 
 Sent when a message gets updated.
