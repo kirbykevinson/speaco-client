@@ -342,6 +342,10 @@ class Chat {
 		this.setEditedMessage(null);
 	}
 	setEditedMessage(id, container) {
+		if (id != null && this.messageId != null) {
+			this.setEditedMessage(null);
+		}
+		
 		this.messageId = id;
 		
 		if (id != null) {
@@ -476,10 +480,6 @@ class Chat {
 			editButton.innerText = "🖋️";
 			
 			editButton.addEventListener("click", () => {
-				if (this.messageId != null) {
-					this.setEditedMessage(null);
-				}
-				
 				this.setEditedMessage(container.chat.id, container);
 			});
 			
