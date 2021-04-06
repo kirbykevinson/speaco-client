@@ -15,3 +15,9 @@ and has the following features:
 3. Log in using the address of your server
 
 [speaco-server]: https://github.com/kirbykevinson/speaco-server
+
+## How to reimplement
+
+See [the protocol reference].
+
+[the protocol reference]: protocol.md
