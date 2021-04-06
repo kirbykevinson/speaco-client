@@ -53,9 +53,9 @@ class Chat {
 		this.elements.messageInput.maxLength = this.limits.messageLength;
 		
 		this.elements.registrationForm.addEventListener("submit", (event) => {
-				event.preventDefault();
-				
-				this.join();
+			event.preventDefault();
+			
+			this.join();
 		});
 		this.elements.chatForm.addEventListener("submit", (event) => {
 			event.preventDefault();
@@ -101,16 +101,11 @@ class Chat {
 		this.close();
 	}
 	
-	reset() {
-		this.previousMessage = "";
-		this.previousAttachmentId = null;
-		
-		this.setEditedMessage(null);
-	}
-	
 	open() {
 		this.elements.registration.hidden = true;
 		this.elements.chat.hidden = false;
+		
+		this.unlock();
 	}
 	close() {
 		if (this.socket) {
@@ -126,10 +121,35 @@ class Chat {
 		
 		this.elements.messages.innerHTML = "";
 		
+		this.unlock();
 		this.reset();
 	}
 	
+	reset() {
+		this.previousMessage = "";
+		this.previousAttachmentId = null;
+		
+		this.setEditedMessage(null);
+	}
+	
+	lock() {
+		this.elements.joinButton.disabled = true;
+		this.elements.cancelEditButton.disabled = true;
+		this.elements.attachButton.disabled = true;
+		this.elements.unattachButton.disabled = true;
+		this.elements.sendButton.disabled = true;
+	}
+	unlock() {
+		this.elements.joinButton.disabled = false;
+		this.elements.cancelEditButton.disabled = false;
+		this.elements.attachButton.disabled = false;
+		this.elements.unattachButton.disabled = false;
+		this.elements.sendButton.disabled = false;
+	}
+	
 	join() {
+		this.lock();
+		
 		if (this.socket) {
 			this.error("already connected");
 			
@@ -538,6 +558,8 @@ class Chat {
 		chooser.type = "file";
 		
 		chooser.addEventListener("change", () => {
+			this.lock();
+			
 			const file = chooser.files[0]
 			
 			if (file.size > this.limits.attachmentSize / 1.5) {
@@ -573,6 +595,8 @@ class Chat {
 			this.elements.attachButton.hidden = false;
 			this.elements.unattachButton.hidden = true;
 		}
+		
+		this.unlock();
 	}
 	
 	downloadAttachment(data) {

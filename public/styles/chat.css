@@ -58,12 +58,17 @@ body > * {
 	box-shadow: 1em 1em #0000007F;
 }
 
+*[disabled] {
+	opacity: 0.5;
+}
+
 input, textarea, button {
 	font-size: inherit;
 	color: var(--foreground-color);
 }
 
-input[type="text"], textarea, button:hover:active, #messages {
+input[type="text"], textarea,
+button:not([disabled]):hover:active, #messages {
 	border-top-color: var(--shadow-color);
 	border-left-color: var(--shadow-color);
 	border-bottom-color: var(--light-color);
@@ -78,7 +83,7 @@ button {
 	background: var(--background-color);
 }
 
-button:hover:active {
+button:not([disabled]):hover:active {
 	background: var(--dark-color);
 }
 
