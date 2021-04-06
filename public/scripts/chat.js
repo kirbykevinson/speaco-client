@@ -260,7 +260,9 @@ class Chat {
 		let insertBefore = null;
 		
 		if (event.prepend) {
-			insertBefore = this.elements.messages.children[0];
+			insertBefore = this.elements.messages.querySelectorAll(
+				".message"
+			)[0];
 		}
 		
 		for (const message of event.messages) {
@@ -443,7 +445,9 @@ class Chat {
 		const logSize = this.elements.messages.children.length;
 		
 		if (logSize > this.limits.logSize) {
-			const buttons = this.elements.messages.children[
+			const buttons = this.elements.messages.querySelectorAll(
+				".message"
+			)[
 				logSize - this.limits.logSize - 1
 			].querySelector(".buttons");
 			
