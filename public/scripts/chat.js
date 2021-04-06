@@ -225,14 +225,6 @@ class Chat {
 			return;
 		}
 		
-		if (typeof event.timestamp != "string") {
-			this.error("server-sent message timestamp isn't a string");
-			
-			console.log(event);
-			
-			return;
-		}
-		
 		this.recieveMessage(event);
 	}
 	onMessageUpdated(event) {
@@ -314,6 +306,14 @@ class Chat {
 			console.log(event);
 			
 			return false;
+		}
+		
+		if (typeof event.timestamp != "string") {
+			this.error("server-sent message timestamp isn't a string");
+			
+			console.log(event);
+			
+			return;
 		}
 		
 		return true;
