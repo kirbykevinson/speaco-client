@@ -240,21 +240,6 @@ class Chat {
 			return;
 		}
 		
-		if (typeof event.sender != "string") {
-			this.error("server-sent message sender isn't a string");
-			
-			console.log(event);
-			
-			return;
-		}
-		if (typeof event.id != "number") {
-			this.error("server-sent message id isn't a number");
-			
-			console.log(event);
-			
-			return;
-		}
-		
 		this.updateMessage(event);
 	}
 	onMessageDeleted(event) {
@@ -306,6 +291,15 @@ class Chat {
 			
 			return false;
 		}
+		
+		if (event.id != null && typeof event.id != "number") {
+			this.error("server-sent message id isn't a number");
+			
+			console.log(event);
+			
+			return;
+		}
+		
 		if (typeof event.text != "string") {
 			this.error("server-sent message text isn't a string");
 			
@@ -313,6 +307,7 @@ class Chat {
 			
 			return false;
 		}
+		
 		if (event.attachment && typeof event.attachment != "string") {
 			this.error("server-sent message attachment isn't a string");
 			
