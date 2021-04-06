@@ -100,4 +100,4 @@ the user.
 
 Sent the the server finishes uploading the attachment to the user
 
-* `data` - ase64-encoded data URL of the attachment's file
+* `data` - base64-encoded data URL of the attachment's file
