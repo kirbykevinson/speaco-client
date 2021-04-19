@@ -463,11 +463,7 @@ class Chat {
 	renderMessage(message, container) {
 		container.innerHTML = "";
 		
-		container.chat = {
-			sender: message.sender,
-			id: message.id,
-			attachment: message.attachment
-		};
+		container.chat = message;
 		
 		// ---
 		
@@ -556,6 +552,10 @@ class Chat {
 		timestampElement.className = "timestamp";
 		timestampElement.innerText =
 			new Date(message.timestamp).toLocaleString();
+		
+		if (message.edited) {
+			timestampElement.innerText += " (Edited)";
+		}
 		
 		container.appendChild(timestampElement);
 	}
