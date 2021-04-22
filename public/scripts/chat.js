@@ -310,6 +310,14 @@ class Chat {
 		this.setAttachmentId(event.id);
 	}
 	onAttachmentFetched(event) {
+		if (event.name && typeof event.name != "string") {
+			this.error("server-sent attachment name isn't a string");
+			
+			console.log(event);
+			
+			return;
+		}
+		
 		if (typeof event.data != "string") {
 			this.error("server-sent attachment data isn't a string");
 			
@@ -318,7 +326,7 @@ class Chat {
 			return;
 		}
 		
-		this.downloadAttachment(event.data);
+		this.downloadAttachment(event);
 	}
 	
 	checkMessageEvent(event) {
@@ -604,10 +612,11 @@ class Chat {
 			
 			reader.addEventListener("load", () => {
 				this.sendEvent("add-attachment", {
+					name: file.name,
 					data: reader.result
 				});
-				
 			});
+			
 			reader.readAsDataURL(file);
 		});
 		
@@ -627,11 +636,11 @@ class Chat {
 		this.unlock();
 	}
 	
-	downloadAttachment(data) {
+	downloadAttachment(attachment) {
 		const link = document.createElement("a");
 		
-		link.href = data;
-		link.download = true;
+		link.href = attachment.data;
+		link.download = attachment.name || "attachment";
 		
 		link.click();
 	}

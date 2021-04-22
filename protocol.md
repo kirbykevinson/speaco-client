@@ -39,7 +39,8 @@ Sent when the user deletes the message.
 
 Sent when the user attaches a file to the message.
 
-* `data` - base64-encoded data URL of the file to be sent; must be
+* `name` - name of the attached file
+* `data` - base64-encoded data URL of the attached file; must be
   within the allowed by the server size
 
 ### `fetch-attachment`
@@ -110,4 +111,5 @@ the user.
 
 Sent when the server finishes uploading the attachment to the user
 
-* `data` - base64-encoded data URL of the attachment's file
+* `name` - name of the attached file
+* `data` - base64-encoded data URL of the attached file
