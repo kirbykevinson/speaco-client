@@ -159,7 +159,7 @@ button:not([disabled]):hover:active {
 	content: ": ";
 }
 
-.message > button {
+.message .text:not(:empty) + button {
 	margin-left: 0.5em;
 }
 
