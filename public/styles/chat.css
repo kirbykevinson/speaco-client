@@ -40,7 +40,7 @@ body {
 	background: #007F7F;
 }
 
-body > *, input, #messages {
+body > *, input, textarea, button, #messages {
 	border-style: solid;
 	border-width: 2px;
 }
@@ -181,6 +181,9 @@ button:not([disabled]):hover:active {
 
 .message .buttons button:hover {
 	opacity: 0.5;
+}
+.message .buttons button:active {
+	background: none;
 }
 
 .message .timestamp {
