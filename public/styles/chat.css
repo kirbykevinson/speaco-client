@@ -33,6 +33,7 @@ body {
 	height : 100vh;
 	padding: 0;
 	margin: 0;
+	line-height: 1;
 	font-family: sans-serif;
 	font-size: 14pt;
 	color: var(--foreground-color);
@@ -63,6 +64,7 @@ body > * {
 }
 
 input, textarea, button {
+	padding: 0.125em 0.5em;
 	font-size: inherit;
 	color: var(--foreground-color);
 }
@@ -127,12 +129,14 @@ button:not([disabled]):hover:active {
 
 #messages {
 	flex-grow: 1;
+	padding: 0 0.5em;
 	overflow: auto;
 	overflow-wrap: break-word;
 }
 
 .message {
 	margin: 0;
+	line-height: 1.5;
 }
 .message.meta {
 	font-weight: bold;
