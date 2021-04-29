@@ -615,6 +615,8 @@ class Chat {
 			const file = chooser.files[0]
 			
 			if (file.size > this.limits.attachmentSize / 1.5) {
+				this.unlock();
+				
 				alert("The file is too large to attach");
 				
 				return;
