@@ -25,7 +25,7 @@ class Chat {
 		
 		this.limits = {
 			nicknameLength: 32,
-			logSize: 128,
+			historySize: 128,
 			messageLength: 1024,
 			attachmentSize: 5 * 2 ** 20
 		};
@@ -450,13 +450,13 @@ class Chat {
 		
 		this.elements.messages.insertBefore(container, insertBefore || null);
 		
-		const logSize = this.elements.messages.children.length;
+		const historySize = this.elements.messages.children.length;
 		
-		if (logSize > this.limits.logSize) {
+		if (historySize > this.limits.historySize) {
 			const buttons = this.elements.messages.querySelectorAll(
 				".message"
 			)[
-				logSize - this.limits.logSize - 1
+				historySize - this.limits.historySize - 1
 			].querySelector(".buttons");
 			
 			if (buttons) {
