@@ -5,8 +5,8 @@ class Chat {
 		
 		this.socket = null;
 		
-		this.messageId = null;
-		this.attachmentId = null;
+		this._messageId = null;
+		this._attachmentId = null;
 		
 		this.previousMessage = "";
 		this.previousAttachmentId = null;
@@ -76,7 +76,7 @@ class Chat {
 		this.elements.unattachButton.addEventListener("click", (event) => {
 			event.preventDefault();
 			
-			this.setAttachmentId(null);
+			this.attachmentId = null;
 		});
 		
 		// We assume that if the device has a mouse, it also has a
@@ -94,6 +94,23 @@ class Chat {
 		}
 		
 		this.close();
+	}
+	
+	get attachmentId() {
+		return this._attachmentId;
+	}
+	set attachmentId(id) {
+		this._attachmentId = id;
+		
+		if (id != null) {
+			this.elements.attachButton.hidden = true;
+			this.elements.unattachButton.hidden = false;
+		} else {
+			this.elements.attachButton.hidden = false;
+			this.elements.unattachButton.hidden = true;
+		}
+		
+		this.unlock();
 	}
 	
 	error(message, error) {
@@ -307,7 +324,7 @@ class Chat {
 			return;
 		}
 		
-		this.setAttachmentId(event.id);
+		this.attachmentId = event.id;
 	}
 	onAttachmentFetched(event) {
 		if (event.name && typeof event.name != "string") {
@@ -380,14 +397,14 @@ class Chat {
 			return;
 		}
 		
-		if (this.messageId == null) {
+		if (this._messageId == null) {
 			this.sendEvent("message", {
 				text: message,
 				attachment: this.attachmentId
 			});
 		} else {
 			this.sendEvent("edit-message", {
-				id: this.messageId,
+				id: this._messageId,
 				text: message,
 				attachment: this.attachmentId
 			});
@@ -395,31 +412,30 @@ class Chat {
 		
 		this.setEditedMessage(null);
 	}
-	setEditedMessage(id, container) {
-		if (id != null && this.messageId != null) {
-			this.setEditedMessage(null);
-		}
-		
-		this.messageId = id;
-		
-		if (id != null) {
+	setEditedMessage(message) {
+		if (message) {
+			if (this._messageId != null) {
+				this.setEditedMessage(null);
+			}
+			
+			this._messageId = message.id;
+			
 			this.elements.cancelEditButton.hidden = false;
 			this.elements.sendButton.innerText = "☑️";
 			
-			if (container) {
-				this.previousMessage = this.elements.messageInput.value;
-				this.previousAttachmentId = this.attachmentId;
-				
-				this.elements.messageInput.value =
-					container.querySelector(".text").innerText;
-				this.setAttachmentId(container.chat.attachment);
-			}
+			this.previousMessage = this.elements.messageInput.value;
+			this.previousAttachmentId = this.attachmentId;
+			
+			this.elements.messageInput.value = message.text;
+			this.attachmentId = message.attachment;
 		} else {
+			this._messageId = null;
+			
 			this.elements.cancelEditButton.hidden = true;
 			this.elements.sendButton.innerText = "➡️";
 			
 			this.elements.messageInput.value = this.previousMessage;
-			this.setAttachmentId(this.previousAttachmentId);
+			this.attachmentId = this.previousAttachmentId;
 			
 			this.previousMessage = "";
 			this.previousAttachmentId = null;
@@ -532,7 +548,7 @@ class Chat {
 			editButton.innerText = "🖋️";
 			
 			editButton.addEventListener("click", () => {
-				this.setEditedMessage(container.chat.id, container);
+				this.setEditedMessage(container.chat);
 			});
 			
 			const deleteButton = document.createElement("button")
@@ -622,20 +638,6 @@ class Chat {
 		
 		chooser.click();
 	}
-	setAttachmentId(id) {
-		this.attachmentId = id;
-		
-		if (id != null) {
-			this.elements.attachButton.hidden = true;
-			this.elements.unattachButton.hidden = false;
-		} else {
-			this.elements.attachButton.hidden = false;
-			this.elements.unattachButton.hidden = true;
-		}
-		
-		this.unlock();
-	}
-	
 	downloadAttachment(attachment) {
 		const link = document.createElement("a");
 		
