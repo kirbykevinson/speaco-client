@@ -335,10 +335,16 @@ class Chat {
 			return;
 		}
 		
-		if (typeof event.data != "string") {
+		if (event.data && typeof event.data != "string") {
 			this.error("server-sent attachment data isn't a string");
 			
 			console.log(event);
+			
+			return;
+		}
+		
+		if (!event.data) {
+			alert("The attachment is too old to download");
 			
 			return;
 		}
@@ -610,17 +616,15 @@ class Chat {
 		chooser.type = "file";
 		
 		chooser.addEventListener("change", () => {
-			this.lock();
-			
 			const file = chooser.files[0]
 			
 			if (file.size > this.limits.attachmentSize / 1.5) {
-				this.unlock();
-				
 				alert("The file is too large to attach");
 				
 				return;
 			}
+			
+			this.lock();
 			
 			const reader = new FileReader();
 			

@@ -39,7 +39,7 @@ Sent when the user deletes the message.
 
 Sent when the user attaches a file to the message.
 
-* `name` - name of the attached file
+* `name` - optional name of the attached file
 * `data` - base64-encoded data URL of the attached file; must be
   within the allowed by the server size
 
@@ -111,5 +111,6 @@ the user.
 
 Sent when the server finishes uploading the attachment to the user
 
-* `name` - name of the attached file
-* `data` - base64-encoded data URL of the attached file
+* `name` - optional name of the attached file
+* `data` - base64-encoded data URL of the attached file or null if the
+   attachment is too old to download
