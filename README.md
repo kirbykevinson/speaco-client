@@ -1,3 +1,5 @@
+# THIS PIECE OF SOFTWARE IS NO LONGER DEVELOPED
+
 Speaco is a simple WebSockets anonymous group chat app intended to be
 used over local area networks. The app was made as a college project
 and has the following features:
